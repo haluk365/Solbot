@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Futures Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            grid-template-rows: 200px 200px 1fr;
+            gap: 20px;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .top-card-1 {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .top-card-2 {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .side-card {
+            grid-column: 2;
+            grid-row: 1 / -1;
+        }
+
+        .chart-area {
+            grid-column: 1;
+            grid-row: 3;
+            position: relative;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .price-ticker {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 10;
+            min-width: 200px;
+        }
+
+        .price-value {
+            color: #00ff88;
+            margin-left: 10px;
+        }
+
+        .price-change {
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .price-up {
+            color: #00ff88;
+        }
+
+        .price-down {
+            color: #ff4757;
+        }
+
+        .connection-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .connected {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+
+        .disconnected {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            border: 1px solid #ff4757;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 18px;
+            color: #888;
+        }
+
+        .card-title {
+            font-size: 16px;
+            color: #ccc;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .pulsing {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 1fr 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                grid-template-rows: 150px 150px 200px 1fr;
+            }
+            
+            .side-card {
+                grid-column: 1;
+                grid-row: 3;
+            }
+            
+            .chart-area {
+                grid-column: 1;
+                grid-row: 4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Üst Sol Kart -->
+        <div class="card top-card-1">
+            <div class="card-title">Panel 1</div>
+            <div class="loading">İçerik yükleniyor...</div>
+        </div>
+
+        <!-- Üst Sağ Kart -->
+        <div class="card top-card-2">
+            <div class="card-title">Panel 2</div>
+            <div class="loading">İçerik yükleniyor...</div>
+        </div>
+
+        <!-- Sağ Yan Panel -->
+        <div class="card side-card">
+            <div class="card-title">Yan Panel</div>
+            <div class="loading">İçerik yükleniyor...</div>
+        </div>
+
+        <!-- Ana Grafik Alanı -->
+        <div class="card chart-area">
+            <div class="price-ticker">
+                <span>SOL/USDT</span>
+                <span class="price-value" id="currentPrice">$0.00</span>
+                <span class="price-change" id="priceChange">+0.00%</span>
+            </div>
+            
+            <div class="connection-status disconnected" id="connectionStatus">
+                Bağlantı Bekleniyor
+            </div>
+
+            <div class="chart-container">
+                <!-- TradingView Widget -->
+                <div class="tradingview-widget-container" style="height:100%;width:100%">
+                    <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                    {
+                        "autosize": true,
+                        "symbol": "BINANCE:SOLUSDT.P",
+                        "interval": "15",
+                        "timezone": "Europe/Istanbul",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "tr",
+                        "toolbar_bg": "rgba(26, 26, 46, 0.9)",
+                        "enable_publishing": false,
+                        "backgroundColor": "rgba(26, 26, 46, 0.1)",
+                        "gridColor": "rgba(255, 255, 255, 0.1)",
+                        "hide_top_toolbar": false,
+                        "hide_legend": false,
+                        "save_image": false,
+                        "container_id": "tradingview_chart",
+                        "studies": [
+                            "Volume@tv-basicstudies"
+                        ]
+                    }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SolanaPriceTracker {
+            constructor() {
+                this.ws = null;
+                this.reconnectAttempts = 0;
+                this.maxReconnectAttempts = 5;
+                this.reconnectDelay = 3000;
+                this.lastPrice = 0;
+                this.priceHistory = [];
+                
+                this.priceElement = document.getElementById('currentPrice');
+                this.changeElement = document.getElementById('priceChange');
+                this.statusElement = document.getElementById('connectionStatus');
+                
+                this.init();
+            }
+
+            init() {
+                this.connect();
+                
+                // Bağlantı koptuğunda otomatik yeniden bağlan
+                setInterval(() => {
+                    if (!this.ws || this.ws.readyState === WebSocket.CLOSED) {
+                        this.connect();
+                    }
+                }, 10000);
+            }
+
+            connect() {
+                try {
+                    this.updateStatus('Bağlanıyor...', 'disconnected');
+                    
+                    // Binance WebSocket URL'si - SOL/USDT Futures için
+                    this.ws = new WebSocket('wss://fstream.binance.com/ws/solusdt@ticker');
+                    
+                    this.ws.onopen = () => {
+                        console.log('Binance WebSocket bağlantısı kuruldu');
+                        this.updateStatus('Bağlı', 'connected');
+                        this.reconnectAttempts = 0;
+                    };
+
+                    this.ws.onmessage = (event) => {
+                        try {
+                            const data = JSON.parse(event.data);
+                            this.updatePrice(data);
+                        } catch (error) {
+                            console.error('Veri parsing hatası:', error);
+                        }
+                    };
+
+                    this.ws.onclose = () => {
+                        console.log('WebSocket bağlantısı kapandı');
+                        this.updateStatus('Bağlantı Kesildi', 'disconnected');
+                        this.scheduleReconnect();
+                    };
+
+                    this.ws.onerror = (error) => {
+                        console.error('WebSocket hatası:', error);
+                        this.updateStatus('Bağlantı Hatası', 'disconnected');
+                    };
+
+                } catch (error) {
+                    console.error('Bağlantı kurma hatası:', error);
+                    this.scheduleReconnect();
+                }
+            }
+
+            updatePrice(data) {
+                if (data.c) { // 'c' current price
+                    const price = parseFloat(data.c);
+                    const change24h = parseFloat(data.P); // 24h change percentage
+                    
+                    // Fiyat değişim yönünü belirle
+                    let changeClass = '';
+                    if (this.lastPrice > 0) {
+                        changeClass = price > this.lastPrice ? 'price-up' : price < this.lastPrice ? 'price-down' : '';
+                    }
+                    
+                    // Fiyatı güncelle
+                    this.priceElement.textContent = `$${price.toFixed(4)}`;
+                    this.priceElement.className = `price-value ${changeClass}`;
+                    
+                    // 24h değişimi güncelle
+                    const changeText = change24h >= 0 ? `+${change24h.toFixed(2)}%` : `${change24h.toFixed(2)}%`;
+                    this.changeElement.textContent = changeText;
+                    this.changeElement.className = `price-change ${change24h >= 0 ? 'price-up' : 'price-down'}`;
+                    
+                    // Animasyon ekle
+                    if (changeClass) {
+                        this.priceElement.classList.add('pulsing');
+                        setTimeout(() => {
+                            this.priceElement.classList.remove('pulsing');
+                        }, 1000);
+                    }
+                    
+                    this.lastPrice = price;
+                    this.priceHistory.push({price, timestamp: Date.now()});
+                    
+                    // Son 100 veriyi tut
+                    if (this.priceHistory.length > 100) {
+                        this.priceHistory.shift();
+                    }
+                }
+            }
+
+            updateStatus(message, className) {
+                this.statusElement.textContent = message;
+                this.statusElement.className = `connection-status ${className}`;
+            }
+
+            scheduleReconnect() {
+                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                    this.reconnectAttempts++;
+                    this.updateStatus(`Yeniden bağlanıyor... (${this.reconnectAttempts}/${this.maxReconnectAttempts})`, 'disconnected');
+                    
+                    setTimeout(() => {
+                        this.connect();
+                    }, this.reconnectDelay);
+                } else {
+                    this.updateStatus('Bağlantı Başarısız', 'disconnected');
+                }
+            }
+
+            disconnect() {
+                if (this.ws) {
+                    this.ws.close();
+                }
+            }
+        }
+
+        // Sayfa yüklendiğinde bot'u başlat
+        let priceTracker;
+        
+        window.addEventListener('load', () => {
+            priceTracker = new SolanaPriceTracker();
+        });
+
+        // Sayfa kapatılırken bağlantıyı kapat
+        window.addEventListener('beforeunload', () => {
+            if (priceTracker) {
+                priceTracker.disconnect();
+            }
+        });
+    </script>
+</body>
+</html>
