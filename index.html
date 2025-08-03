@@ -57,6 +57,15 @@
             font-size: 24px;
             font-weight: bold;
             color: #3498db;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .solana-icon {
+            width: 28px;
+            height: 28px;
+            fill: #9945FF;
         }
 
         .main-price {
@@ -269,7 +278,14 @@
         <!-- Header Panel -->
         <div class="panel header-panel">
             <div class="logo-section">
-                <div class="logo">📊 SOL FUTURES</div>
+                <div class="logo">
+                    <svg class="solana-icon" viewBox="0 0 646 526" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M108.53 455.83c2.22-1.73 4.94-2.65 7.78-2.65h505.18c5.3 0 7.93 6.42 4.18 10.17L508.47 580.17c-2.22 1.73-4.94 2.65-7.78 2.65H-4.49c-5.3 0-7.93-6.42-4.18-10.17l117.2-116.82z" transform="translate(4.49 -56.83)"/>
+                        <path d="M108.53 56.83c2.24-1.73 4.96-2.65 7.78-2.65h505.18c5.3 0 7.93 6.42 4.18 10.17L508.47 181.17c-2.22 1.73-4.94 2.65-7.78 2.65H-4.49c-5.3 0-7.93-6.42-4.18-10.17L108.53 56.83z" transform="translate(4.49 -56.83)"/>
+                        <path d="M508.47 256.83c-2.22-1.73-4.94-2.65-7.78-2.65H-4.49c-5.3 0-7.93 6.42-4.18 10.17l117.2 116.82c2.22 1.73 4.94 2.65 7.78 2.65h505.18c5.3 0 7.93-6.42 4.18-10.17L508.47 256.83z" transform="translate(4.49 -56.83)"/>
+                    </svg>
+                    SOLANA
+                </div>
                 <div>
                     <span class="main-price" id="headerPrice">$0.0000</span>
                     <span class="price-change" id="headerChange">+0.00%</span>
@@ -360,6 +376,14 @@
             <!-- Futures Data -->
             <div class="data-section">
                 <div class="section-header">Futures Bilgileri</div>
+                <div class="data-item">
+                    <span class="data-label">Vadeli Fiyat</span>
+                    <span class="data-value" id="futuresPrice">$0.0000</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">24s Değişim</span>
+                    <span class="data-value" id="futures24hChange">+0.00%</span>
+                </div>
                 <div class="data-item">
                     <span class="data-label">Funding Rate</span>
                     <span class="data-value" id="fundingRate">0.0000%</span>
@@ -551,22 +575,28 @@
                     const avgPrice = parseFloat(data.w);
                     
                     // Header updates
-                    document.getElementById('headerPrice').textContent = `$${price.toFixed(4)}`;
+                    document.getElementById('headerPrice').textContent = `${price.toFixed(4)}`;
                     const headerChange = document.getElementById('headerChange');
                     headerChange.textContent = `${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%`;
                     headerChange.className = `price-change ${change24h >= 0 ? 'positive' : 'negative'}`;
                     
                     // Data panel updates
-                    document.getElementById('spotPrice').textContent = `$${price.toFixed(4)}`;
+                    document.getElementById('spotPrice').textContent = `${price.toFixed(4)}`;
                     const priceChangeEl = document.getElementById('priceChange');
                     priceChangeEl.textContent = `${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%`;
                     priceChangeEl.className = `data-value ${change24h >= 0 ? 'positive' : 'negative'}`;
                     
-                    document.getElementById('high24h').textContent = `$${high24h.toFixed(4)}`;
-                    document.getElementById('low24h').textContent = `$${low24h.toFixed(4)}`;
+                    // Futures panel updates (same data as header)
+                    document.getElementById('futuresPrice').textContent = `${price.toFixed(4)}`;
+                    const futures24hChangeEl = document.getElementById('futures24hChange');
+                    futures24hChangeEl.textContent = `${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%`;
+                    futures24hChangeEl.className = `data-value ${change24h >= 0 ? 'positive' : 'negative'}`;
+                    
+                    document.getElementById('high24h').textContent = `${high24h.toFixed(4)}`;
+                    document.getElementById('low24h').textContent = `${low24h.toFixed(4)}`;
                     document.getElementById('volume24h').textContent = this.formatNumber(volume);
                     document.getElementById('trades24h').textContent = this.formatNumber(count);
-                    document.getElementById('avgPrice').textContent = `$${avgPrice.toFixed(4)}`;
+                    document.getElementById('avgPrice').textContent = `${avgPrice.toFixed(4)}`;
                 }
             }
 
