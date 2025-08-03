@@ -22,7 +22,7 @@
         .dashboard {
             display: grid;
             grid-template-columns: 1fr 300px;
-            grid-template-rows: 200px 200px 1fr;
+            grid-template-rows: 75px 75px 1fr 50px;
             gap: 20px;
             padding: 20px;
             height: 100vh;
@@ -65,65 +65,16 @@
             position: relative;
         }
 
+        .bottom-card {
+            grid-column: 1;
+            grid-row: 4;
+        }
+
         .chart-container {
             width: 100%;
             height: 100%;
             border-radius: 15px;
             overflow: hidden;
-        }
-
-        .price-ticker {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: bold;
-            z-index: 10;
-            min-width: 200px;
-        }
-
-        .price-value {
-            color: #00ff88;
-            margin-left: 10px;
-        }
-
-        .price-change {
-            font-size: 14px;
-            margin-left: 10px;
-        }
-
-        .price-up {
-            color: #00ff88;
-        }
-
-        .price-down {
-            color: #ff4757;
-        }
-
-        .connection-status {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            z-index: 10;
-        }
-
-        .connected {
-            background: rgba(0, 255, 136, 0.2);
-            color: #00ff88;
-            border: 1px solid #00ff88;
-        }
-
-        .disconnected {
-            background: rgba(255, 71, 87, 0.2);
-            color: #ff4757;
-            border: 1px solid #ff4757;
         }
 
         .loading {
@@ -161,7 +112,7 @@
         @media (max-width: 768px) {
             .dashboard {
                 grid-template-columns: 1fr;
-                grid-template-rows: 150px 150px 200px 1fr;
+                grid-template-rows: 60px 60px 200px 1fr 40px;
             }
             
             .side-card {
@@ -172,6 +123,11 @@
             .chart-area {
                 grid-column: 1;
                 grid-row: 4;
+            }
+
+            .bottom-card {
+                grid-column: 1;
+                grid-row: 5;
             }
         }
     </style>
@@ -198,16 +154,6 @@
 
         <!-- Ana Grafik Alanı -->
         <div class="card chart-area">
-            <div class="price-ticker">
-                <span>SOL/USDT</span>
-                <span class="price-value" id="currentPrice">$0.00</span>
-                <span class="price-change" id="priceChange">+0.00%</span>
-            </div>
-            
-            <div class="connection-status disconnected" id="connectionStatus">
-                Bağlantı Bekleniyor
-            </div>
-
             <div class="chart-container">
                 <!-- TradingView Widget -->
                 <div class="tradingview-widget-container" style="height:100%;width:100%">
@@ -236,6 +182,12 @@
                     </script>
                 </div>
             </div>
+        </div>
+
+        <!-- Alt Panel -->
+        <div class="card bottom-card">
+            <div class="card-title">Alt Panel</div>
+            <div class="loading">İçerik yükleniyor...</div>
         </div>
     </div>
 
