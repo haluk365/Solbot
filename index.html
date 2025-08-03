@@ -12,367 +12,281 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
-            overflow: hidden;
+            background: #f5f5f5;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.4;
         }
 
         .dashboard {
             display: grid;
-            grid-template-columns: 1fr 300px;
-            grid-template-rows: 50px 50px 1fr 50px;
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: 1fr 320px;
+            grid-template-rows: 120px 1fr 80px;
+            gap: 15px;
+            padding: 15px;
             height: 100vh;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+        .panel {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
         }
 
-
-
-        .top-card-1 {
-            grid-column: 1;
+        .header-panel {
+            grid-column: 1 / -1;
             grid-row: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            border: none;
         }
 
-        .top-card-2 {
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .main-price {
+            font-size: 32px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .price-change {
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .positive { color: #27ae60; }
+        .negative { color: #e74c3c; }
+
+        .chart-panel {
             grid-column: 1;
             grid-row: 2;
+            padding: 10px;
         }
 
-        .side-card {
+        .data-panel {
             grid-column: 2;
-            grid-row: 1 / -1;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
         }
 
-        .chart-area {
-            grid-column: 1;
+        .status-panel {
+            grid-column: 1 / -1;
             grid-row: 3;
-            position: relative;
+            background: #34495e;
+            color: white;
+            border: none;
         }
 
-        .bottom-card {
-            grid-column: 1;
-            grid-row: 4;
+        .panel-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+
+        .data-section {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 3px;
+            padding: 12px;
+        }
+
+        .section-header {
+            font-size: 12px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+
+        .data-item:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .data-value {
+            font-size: 11px;
+            color: #333;
+            font-weight: 600;
+            text-align: right;
         }
 
         .chart-container {
             width: 100%;
             height: 100%;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            font-size: 18px;
-            color: #888;
-        }
-
-        .card-title {
-            font-size: 16px;
-            color: #ccc;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .sol-data-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            gap: 4px;
-            padding: 6px;
-            font-size: 11px;
-            overflow-y: auto;
-        }
-
-        .data-section {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 6px;
-            padding: 6px 8px;
-            border-left: 3px solid rgba(255, 255, 255, 0.2);
-            flex-shrink: 0;
-        }
-
-        .section-title {
-            font-size: 11px;
-            color: #999;
-            margin-bottom: 4px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3px;
-            min-height: 18px;
-        }
-
-        .data-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .data-key {
-            font-size: 12px;
-            color: #bbb;
-            font-weight: 400;
-        }
-
-        .data-val {
-            font-size: 12px;
-            font-weight: 600;
-            color: #fff;
-            text-align: right;
-        }
-
-        .positive {
-            color: #00ff88 !important;
-        }
-
-        .negative {
-            color: #ff4757 !important;
-        }
-
-        .stream-monitor {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .monitor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 6px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .monitor-title {
-            font-size: 11px;
-            color: #999;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .reconnect-btn {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 4px;
-            padding: 4px 8px;
-            color: #00ff88;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .reconnect-btn:hover {
-            background: rgba(0, 255, 136, 0.2);
-            border-color: rgba(0, 255, 136, 0.5);
-        }
-
-        .streams-container {
-            display: flex;
-            gap: 12px;
-            flex: 1;
-            align-items: center;
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            border-radius: 3px;
         }
 
         .stream-status {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 6px;
-            padding: 6px 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            flex: 1;
-            min-width: 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #555;
         }
 
-        .stream-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #666;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-        }
-
-        .stream-dot.connected {
-            background: #00ff88;
-            box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
-        }
-
-        .stream-dot.connecting {
-            background: #ffa500;
-            animation: pulse 1s infinite;
-        }
-
-        .stream-dot.disconnected {
-            background: #ff4757;
+        .stream-status:last-child {
+            border-bottom: none;
         }
 
         .stream-info {
-            flex: 1;
-            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #95a5a6;
+        }
+
+        .status-dot.connected { background: #27ae60; }
+        .status-dot.connecting { background: #f39c12; }
+        .status-dot.disconnected { background: #e74c3c; }
 
         .stream-name {
-            font-size: 10px;
-            color: #fff;
-            font-weight: 500;
-            line-height: 1;
-        }
-
-        .stream-url {
-            font-size: 8px;
-            color: #888;
-            margin-top: 1px;
-            line-height: 1;
+            font-size: 12px;
+            color: #ecf0f1;
         }
 
         .stream-data {
-            font-size: 8px;
-            color: #bbb;
-            text-align: right;
-            flex-shrink: 0;
-            min-width: 30px;
+            font-size: 10px;
+            color: #bdc3c7;
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
-            100% { opacity: 1; transform: scale(1); }
+        .reconnect-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-left: 15px;
         }
 
-        @media (max-width: 1200px) {
+        .reconnect-button:hover {
+            background: #2980b9;
+        }
+
+        .liquidation-alert {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 3px;
+            padding: 8px;
+            margin-top: 10px;
+        }
+
+        .liquidation-alert.long {
+            background: #f0fff4;
+            border-color: #9ae6b4;
+        }
+
+        .liquidation-alert.short {
+            background: #fff5f5;
+            border-color: #feb2b2;
+        }
+
+        .alert-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .alert-content {
+            font-size: 11px;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
             .dashboard {
-                grid-template-columns: 1fr 250px;
+                grid-template-columns: 1fr;
+                grid-template-rows: 100px 200px 1fr 80px;
+            }
+            
+            .data-panel {
+                grid-column: 1;
+                grid-row: 3;
+            }
+            
+            .chart-panel {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .main-price {
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
     <div class="dashboard">
-        <!-- Üst Sol Kart -->
-        <div class="card top-card-1">
-            <div class="card-title">Panel 1</div>
-            <div class="loading">İçerik yükleniyor...</div>
-        </div>
-
-        <!-- Üst Sağ Kart -->
-        <div class="card top-card-2">
-            <div class="card-title">Panel 2</div>
-            <div class="loading">İçerik yükleniyor...</div>
-        </div>
-
-        <!-- Sağ Yan Panel -->
-        <div class="card side-card">
-            <div class="sol-data-container">
-                <!-- Ana Fiyat Bilgileri -->
-                <div class="data-section" style="border-left-color: #00ff88;">
-                    <div class="section-title">Fiyat</div>
-                    <div class="data-row">
-                        <span class="data-key">Spot</span>
-                        <span class="data-val" id="price">$0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">Mark</span>
-                        <span class="data-val" id="markPrice">$0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">Index</span>
-                        <span class="data-val" id="indexPrice">$0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">24h %</span>
-                        <span class="data-val" id="change24h">0.00%</span>
-                    </div>
+        <!-- Header Panel -->
+        <div class="panel header-panel">
+            <div class="logo-section">
+                <div class="logo">📊 SOL FUTURES</div>
+                <div>
+                    <span class="main-price" id="headerPrice">$0.0000</span>
+                    <span class="price-change" id="headerChange">+0.00%</span>
                 </div>
-
-                <!-- 24h İstatistikler -->
-                <div class="data-section" style="border-left-color: #3498db;">
-                    <div class="section-title">24h Veriler</div>
-                    <div class="data-row">
-                        <span class="data-key">Yüksek</span>
-                        <span class="data-val" id="high24h">$0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">Düşük</span>
-                        <span class="data-val" id="low24h">$0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">Hacim</span>
-                        <span class="data-val" id="volume">0</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">İşlem</span>
-                        <span class="data-val" id="count">0</span>
-                    </div>
-                </div>
-
-                <!-- Futures Bilgileri -->
-                <div class="data-section" style="border-left-color: #e74c3c;">
-                    <div class="section-title">Futures</div>
-                    <div class="data-row">
-                        <span class="data-key">Funding</span>
-                        <span class="data-val" id="fundingRate">0.000%</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">Sonraki</span>
-                        <span class="data-val" id="nextFunding">--:--</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">Ortalama</span>
-                        <span class="data-val" id="avgPrice">$0.00</span>
-                    </div>
-                </div>
-
-                <!-- Liquidation Bilgileri -->
-                <div class="data-section" style="border-left-color: #ff6b35;">
-                    <div class="section-title">Son Liquidation</div>
-                    <div class="data-row">
-                        <span class="data-key">Side</span>
-                        <span class="data-val" id="liqSide">-</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">Fiyat</span>
-                        <span class="data-val" id="liqPrice">$0.00</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">Miktar</span>
-                        <span class="data-val" id="liqQuantity">0</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-key">Zaman</span>
-                        <span class="data-val" id="liqTime">--:--</span>
-                    </div>
-                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 12px; color: #bdc3c7;">Binance Futures</div>
+                <div style="font-size: 10px; color: #95a5a6;" id="currentTime">--:--:--</div>
             </div>
         </div>
 
-        <!-- Ana Grafik Alanı -->
-        <div class="card chart-area">
+        <!-- Chart Panel -->
+        <div class="panel chart-panel">
+            <div class="panel-title">SOL/USDT Futures Chart</div>
             <div class="chart-container">
-                <!-- TradingView Widget -->
                 <div class="tradingview-widget-container" style="height:100%;width:100%">
                     <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
                     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
@@ -381,17 +295,16 @@
                         "symbol": "BINANCE:SOLUSDT.P",
                         "interval": "15",
                         "timezone": "Europe/Istanbul",
-                        "theme": "dark",
+                        "theme": "light",
                         "style": "1",
                         "locale": "tr",
-                        "toolbar_bg": "rgba(26, 26, 46, 0.9)",
+                        "toolbar_bg": "#f5f5f5",
                         "enable_publishing": false,
-                        "backgroundColor": "rgba(26, 26, 46, 0.1)",
-                        "gridColor": "rgba(255, 255, 255, 0.1)",
+                        "backgroundColor": "#ffffff",
+                        "gridColor": "#f0f0f0",
                         "hide_top_toolbar": false,
                         "hide_legend": false,
                         "save_image": false,
-                        "container_id": "tradingview_chart",
                         "studies": [
                             "Volume@tv-basicstudies"
                         ]
@@ -401,47 +314,116 @@
             </div>
         </div>
 
-        <!-- Alt Panel -->
-        <div class="card bottom-card">
-            <div class="stream-monitor">
-                <div class="monitor-header">
-                    <span class="monitor-title">WebSocket Streams</span>
-                    <button class="reconnect-btn" onclick="priceTracker.reconnectAll()" title="Tüm bağlantıları yeniden kur">
-                        <span>🔄</span>
-                    </button>
+        <!-- Data Panel -->
+        <div class="panel data-panel">
+            <div class="panel-title">Market Data</div>
+            
+            <!-- Price Information -->
+            <div class="data-section">
+                <div class="section-header">Fiyat Bilgileri</div>
+                <div class="data-item">
+                    <span class="data-label">Spot Fiyat</span>
+                    <span class="data-value" id="spotPrice">$0.0000</span>
                 </div>
-                <div class="streams-container">
-                    <div class="stream-status" id="tickerStatus">
-                        <div class="stream-dot" id="tickerDot"></div>
-                        <div class="stream-info">
-                            <div class="stream-name">Ticker</div>
-                            <div class="stream-url">@ticker</div>
-                        </div>
-                        <div class="stream-data" id="tickerData">-</div>
+                <div class="data-item">
+                    <span class="data-label">Mark Fiyat</span>
+                    <span class="data-value" id="markPrice">$0.0000</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Index Fiyat</span>
+                    <span class="data-value" id="indexPrice">$0.0000</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">24h Değişim</span>
+                    <span class="data-value" id="priceChange">+0.00%</span>
+                </div>
+            </div>
+
+            <!-- 24h Statistics -->
+            <div class="data-section">
+                <div class="section-header">24 Saat İstatistikleri</div>
+                <div class="data-grid">
+                    <div class="data-item">
+                        <span class="data-label">Yüksek</span>
+                        <span class="data-value" id="high24h">$0.0000</span>
                     </div>
-                    <div class="stream-status" id="markPriceStatus">
-                        <div class="stream-dot" id="markPriceDot"></div>
-                        <div class="stream-info">
-                            <div class="stream-name">Mark Price</div>
-                            <div class="stream-url">@markPrice</div>
-                        </div>
-                        <div class="stream-data" id="markPriceData">-</div>
+                    <div class="data-item">
+                        <span class="data-label">Düşük</span>
+                        <span class="data-value" id="low24h">$0.0000</span>
                     </div>
-                    <div class="stream-status" id="liquidationStatus">
-                        <div class="stream-dot" id="liquidationDot"></div>
-                        <div class="stream-info">
-                            <div class="stream-name">Liquidation</div>
-                            <div class="stream-url">@forceOrder</div>
-                        </div>
-                        <div class="stream-data" id="liquidationData">-</div>
+                    <div class="data-item">
+                        <span class="data-label">Hacim</span>
+                        <span class="data-value" id="volume24h">0</span>
                     </div>
+                    <div class="data-item">
+                        <span class="data-label">İşlem</span>
+                        <span class="data-value" id="trades24h">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Futures Data -->
+            <div class="data-section">
+                <div class="section-header">Futures Bilgileri</div>
+                <div class="data-item">
+                    <span class="data-label">Funding Rate</span>
+                    <span class="data-value" id="fundingRate">0.0000%</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Sonraki Funding</span>
+                    <span class="data-value" id="nextFunding">--:--</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Ağırlıklı Ortalama</span>
+                    <span class="data-value" id="avgPrice">$0.0000</span>
+                </div>
+            </div>
+
+            <!-- Liquidation Info -->
+            <div class="liquidation-alert" id="liquidationAlert" style="display: none;">
+                <div class="alert-title">Son Liquidation</div>
+                <div class="alert-content" id="liquidationContent">
+                    Beklemede...
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Panel -->
+        <div class="panel status-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 12px; font-weight: bold;">WebSocket Streams</div>
+                <button class="reconnect-button" onclick="priceTracker.reconnectAll()">
+                    Yeniden Bağlan
+                </button>
+            </div>
+            <div style="display: flex; gap: 20px; margin-top: 10px;">
+                <div class="stream-status">
+                    <div class="stream-info">
+                        <div class="status-dot" id="tickerDot"></div>
+                        <span class="stream-name">Ticker (@ticker)</span>
+                    </div>
+                    <div class="stream-data" id="tickerData">-</div>
+                </div>
+                <div class="stream-status">
+                    <div class="stream-info">
+                        <div class="status-dot" id="markPriceDot"></div>
+                        <span class="stream-name">Mark Price (@markPrice)</span>
+                    </div>
+                    <div class="stream-data" id="markPriceData">-</div>
+                </div>
+                <div class="stream-status">
+                    <div class="stream-info">
+                        <div class="status-dot" id="liquidationDot"></div>
+                        <span class="stream-name">Liquidation (@forceOrder)</span>
+                    </div>
+                    <div class="stream-data" id="liquidationData">-</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        class SolanaPriceTracker {
+        class SolanaFuturesTracker {
             constructor() {
                 this.ws = null;
                 this.markPriceWs = null;
@@ -449,8 +431,6 @@
                 this.reconnectAttempts = 0;
                 this.maxReconnectAttempts = 5;
                 this.reconnectDelay = 3000;
-                this.lastPrice = 0;
-                this.priceHistory = [];
                 this.lastMessages = {
                     ticker: 0,
                     markPrice: 0,
@@ -461,16 +441,14 @@
             }
 
             init() {
+                this.updateTime();
+                setInterval(() => this.updateTime(), 1000);
+                
                 this.connect();
                 this.connectMarkPrice();
                 this.connectLiquidation();
                 
-                // Stream durumlarını başlat
-                this.updateStreamStatus('ticker', 'connecting');
-                this.updateStreamStatus('markPrice', 'connecting');
-                this.updateStreamStatus('liquidation', 'connecting');
-                
-                // Bağlantı koptuğunda otomatik yeniden bağlan
+                // Auto reconnection
                 setInterval(() => {
                     if (!this.ws || this.ws.readyState === WebSocket.CLOSED) {
                         this.connect();
@@ -481,33 +459,22 @@
                     if (!this.liquidationWs || this.liquidationWs.readyState === WebSocket.CLOSED) {
                         this.connectLiquidation();
                     }
-                }, 10000);
-                
-                // Stream health check
-                setInterval(() => {
-                    const now = Date.now();
-                    // Ticker stream - 10 saniyeden uzun süre mesaj gelmemişse
-                    if (this.lastMessages.ticker > 0 && now - this.lastMessages.ticker > 10000) {
-                        this.updateStreamData('ticker', 'Timeout');
-                        this.updateStreamStatus('ticker', 'disconnected');
-                    }
-                    // Mark price stream - 15 saniyeden uzun süre mesaj gelmemişse
-                    if (this.lastMessages.markPrice > 0 && now - this.lastMessages.markPrice > 15000) {
-                        this.updateStreamData('markPrice', 'Timeout');
-                        this.updateStreamStatus('markPrice', 'disconnected');
-                    }
-                }, 5000);
+                }, 15000);
+            }
+
+            updateTime() {
+                const now = new Date();
+                document.getElementById('currentTime').textContent = 
+                    now.toLocaleTimeString('tr-TR');
             }
 
             connect() {
                 try {
                     this.updateStreamStatus('ticker', 'connecting');
-                    
-                    // Binance WebSocket URL'si - SOL/USDT Futures için
                     this.ws = new WebSocket('wss://fstream.binance.com/ws/solusdt@ticker');
                     
                     this.ws.onopen = () => {
-                        console.log('Binance WebSocket bağlantısı kuruldu');
+                        console.log('Ticker WebSocket connected');
                         this.updateStreamStatus('ticker', 'connected');
                         this.reconnectAttempts = 0;
                     };
@@ -515,71 +482,206 @@
                     this.ws.onmessage = (event) => {
                         try {
                             const data = JSON.parse(event.data);
-                            this.updatePrice(data);
+                            this.updatePriceData(data);
                             this.lastMessages.ticker = Date.now();
-                            this.updateStreamData('ticker', 'Son: ' + new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute: '2-digit', second: '2-digit'}));
+                            this.updateStreamData('ticker', 'Active');
                         } catch (error) {
-                            console.error('Veri parsing hatası:', error);
+                            console.error('Ticker data parsing error:', error);
                         }
                     };
 
                     this.ws.onclose = () => {
-                        console.log('WebSocket bağlantısı kapandı');
+                        console.log('Ticker WebSocket disconnected');
                         this.updateStreamStatus('ticker', 'disconnected');
-                        this.scheduleReconnect();
+                        this.updateStreamData('ticker', 'Disconnected');
                     };
 
                     this.ws.onerror = (error) => {
-                        console.error('WebSocket hatası:', error);
+                        console.error('Ticker WebSocket error:', error);
                         this.updateStreamStatus('ticker', 'disconnected');
                     };
 
                 } catch (error) {
-                    console.error('Bağlantı kurma hatası:', error);
+                    console.error('Ticker connection error:', error);
                     this.updateStreamStatus('ticker', 'disconnected');
-                    this.scheduleReconnect();
                 }
             }
 
-            updatePrice(data) {
-                if (data.c) { // 'c' current price
+            connectMarkPrice() {
+                try {
+                    this.updateStreamStatus('markPrice', 'connecting');
+                    this.markPriceWs = new WebSocket('wss://fstream.binance.com/ws/solusdt@markPrice');
+                    
+                    this.markPriceWs.onopen = () => {
+                        console.log('Mark Price WebSocket connected');
+                        this.updateStreamStatus('markPrice', 'connected');
+                    };
+
+                    this.markPriceWs.onmessage = (event) => {
+                        try {
+                            const data = JSON.parse(event.data);
+                            this.updateMarkPriceData(data);
+                            this.lastMessages.markPrice = Date.now();
+                            this.updateStreamData('markPrice', 'Active');
+                        } catch (error) {
+                            console.error('Mark Price data parsing error:', error);
+                        }
+                    };
+
+                    this.markPriceWs.onclose = () => {
+                        console.log('Mark Price WebSocket disconnected');
+                        this.updateStreamStatus('markPrice', 'disconnected');
+                        this.updateStreamData('markPrice', 'Disconnected');
+                    };
+
+                    this.markPriceWs.onerror = (error) => {
+                        console.error('Mark Price WebSocket error:', error);
+                        this.updateStreamStatus('markPrice', 'disconnected');
+                    };
+
+                } catch (error) {
+                    console.error('Mark Price connection error:', error);
+                    this.updateStreamStatus('markPrice', 'disconnected');
+                }
+            }
+
+            connectLiquidation() {
+                try {
+                    this.updateStreamStatus('liquidation', 'connecting');
+                    this.liquidationWs = new WebSocket('wss://fstream.binance.com/ws/solusdt@forceOrder');
+                    
+                    this.liquidationWs.onopen = () => {
+                        console.log('Liquidation WebSocket connected');
+                        this.updateStreamStatus('liquidation', 'connected');
+                        this.updateStreamData('liquidation', 'Waiting');
+                    };
+
+                    this.liquidationWs.onmessage = (event) => {
+                        try {
+                            const data = JSON.parse(event.data);
+                            this.updateLiquidationData(data);
+                            this.lastMessages.liquidation = Date.now();
+                        } catch (error) {
+                            console.error('Liquidation data parsing error:', error);
+                        }
+                    };
+
+                    this.liquidationWs.onclose = () => {
+                        console.log('Liquidation WebSocket disconnected');
+                        this.updateStreamStatus('liquidation', 'disconnected');
+                        this.updateStreamData('liquidation', 'Disconnected');
+                    };
+
+                    this.liquidationWs.onerror = (error) => {
+                        console.error('Liquidation WebSocket error:', error);
+                        this.updateStreamStatus('liquidation', 'disconnected');
+                    };
+
+                } catch (error) {
+                    console.error('Liquidation connection error:', error);
+                    this.updateStreamStatus('liquidation', 'disconnected');
+                }
+            }
+
+            updatePriceData(data) {
+                if (data.c) {
                     const price = parseFloat(data.c);
-                    const change24h = parseFloat(data.P); // 24h change percentage
-                    const high24h = parseFloat(data.h); // 24h high
-                    const low24h = parseFloat(data.l); // 24h low
-                    const volume = parseFloat(data.v); // volume
-                    const quoteVolume = parseFloat(data.q); // quote volume
-                    const count = parseInt(data.n); // count
-                    const open = parseFloat(data.o); // open price
+                    const change24h = parseFloat(data.P);
+                    const high24h = parseFloat(data.h);
+                    const low24h = parseFloat(data.l);
+                    const volume = parseFloat(data.v);
+                    const count = parseInt(data.n);
+                    const avgPrice = parseFloat(data.w);
                     
-                    // Panel 2 verilerini güncelle
-                    document.getElementById('price').textContent = `${price.toFixed(4)}`;
+                    // Header price update
+                    document.getElementById('headerPrice').textContent = `$${price.toFixed(4)}`;
                     
-                    const changeElement = document.getElementById('change24h');
-                    changeElement.textContent = `${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%`;
-                    changeElement.className = `data-value ${change24h >= 0 ? 'positive' : 'negative'}`;
+                    const headerChange = document.getElementById('headerChange');
+                    headerChange.textContent = `${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%`;
+                    headerChange.className = `price-change ${change24h >= 0 ? 'positive' : 'negative'}`;
                     
-                    document.getElementById('high24h').textContent = `${high24h.toFixed(4)}`;
-                    document.getElementById('low24h').textContent = `${low24h.toFixed(4)}`;
-                    document.getElementById('open').textContent = `${open.toFixed(4)}`;
+                    // Data panel updates
+                    document.getElementById('spotPrice').textContent = `$${price.toFixed(4)}`;
                     
-                    // Hacim formatla
-                    document.getElementById('volume').textContent = this.formatNumber(volume);
-                    document.getElementById('quoteVolume').textContent = this.formatNumber(quoteVolume);
-                    document.getElementById('count').textContent = this.formatNumber(count);
+                    const priceChangeEl = document.getElementById('priceChange');
+                    priceChangeEl.textContent = `${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%`;
+                    priceChangeEl.className = `data-value ${change24h >= 0 ? 'positive' : 'negative'}`;
                     
-                    this.lastPrice = price;
-                    this.priceHistory.push({price, timestamp: Date.now()});
+                    document.getElementById('high24h').textContent = `$${high24h.toFixed(4)}`;
+                    document.getElementById('low24h').textContent = `$${low24h.toFixed(4)}`;
+                    document.getElementById('volume24h').textContent = this.formatNumber(volume);
+                    document.getElementById('trades24h').textContent = this.formatNumber(count);
+                    document.getElementById('avgPrice').textContent = `$${avgPrice.toFixed(4)}`;
+                }
+            }
+
+            updateMarkPriceData(data) {
+                if (data.e === 'markPriceUpdate') {
+                    const markPrice = parseFloat(data.p);
+                    const indexPrice = parseFloat(data.i);
+                    const fundingRate = parseFloat(data.r);
+                    const nextFundingTime = parseInt(data.T);
                     
-                    // Son 100 veriyi tut
-                    if (this.priceHistory.length > 100) {
-                        this.priceHistory.shift();
+                    document.getElementById('markPrice').textContent = `$${markPrice.toFixed(4)}`;
+                    document.getElementById('indexPrice').textContent = `$${indexPrice.toFixed(4)}`;
+                    
+                    const fundingEl = document.getElementById('fundingRate');
+                    fundingEl.textContent = `${(fundingRate * 100).toFixed(4)}%`;
+                    fundingEl.className = `data-value ${fundingRate >= 0 ? 'positive' : 'negative'}`;
+                    
+                    // Next funding time
+                    const now = new Date();
+                    const timeDiff = nextFundingTime - now.getTime();
+                    
+                    if (timeDiff > 0) {
+                        const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                        document.getElementById('nextFunding').textContent = `${hours}:${minutes.toString().padStart(2, '0')}`;
+                    } else {
+                        document.getElementById('nextFunding').textContent = '--:--';
                     }
                 }
             }
 
-            updateStatus(message, className) {
-                console.log(`Durum: ${message}`);
+            updateLiquidationData(data) {
+                if (data.e === 'forceOrder' && data.o) {
+                    const order = data.o;
+                    const side = order.S;
+                    const price = parseFloat(order.ap || order.p);
+                    const quantity = parseFloat(order.q);
+                    const tradeTime = parseInt(order.T);
+                    
+                    const alertEl = document.getElementById('liquidationAlert');
+                    const contentEl = document.getElementById('liquidationContent');
+                    
+                    alertEl.style.display = 'block';
+                    alertEl.className = `liquidation-alert ${side.toLowerCase()}`;
+                    
+                    const timeStr = new Date(tradeTime).toLocaleTimeString('tr-TR');
+                    contentEl.innerHTML = `
+                        <strong>${side === 'BUY' ? 'LONG' : 'SHORT'} Liquidation</strong><br>
+                        ${this.formatNumber(quantity)} SOL @ $${price.toFixed(4)}<br>
+                        <small>${timeStr}</small>
+                    `;
+                    
+                    this.updateStreamData('liquidation', `${side} $${price.toFixed(2)}`);
+                    
+                    console.log(`🔥 LIQUIDATION: ${side} ${quantity} SOL @ $${price.toFixed(4)} at ${timeStr}`);
+                }
+            }
+
+            updateStreamStatus(streamName, status) {
+                const dot = document.getElementById(`${streamName}Dot`);
+                if (dot) {
+                    dot.className = `status-dot ${status}`;
+                }
+            }
+
+            updateStreamData(streamName, data) {
+                const dataElement = document.getElementById(`${streamName}Data`);
+                if (dataElement) {
+                    dataElement.textContent = data;
+                }
             }
 
             formatNumber(num) {
@@ -590,136 +692,35 @@
                 } else if (num >= 1e3) {
                     return (num / 1e3).toFixed(1) + 'K';
                 } else {
-                    return num.toFixed(2);
+                    return num.toFixed(0);
                 }
             }
 
-            connectMarkPrice() {
-                try {
-                    this.updateStreamStatus('markPrice', 'connecting');
-                    
-                    // Mark Price Stream - her 3 saniyede güncellenir
-                    this.markPriceWs = new WebSocket('wss://fstream.binance.com/ws/solusdt@markPrice');
-                    
-                    this.markPriceWs.onopen = () => {
-                        console.log('Mark Price WebSocket bağlantısı kuruldu');
-                        this.updateStreamStatus('markPrice', 'connected');
-                    };
-
-                    this.markPriceWs.onmessage = (event) => {
-                        try {
-                            const data = JSON.parse(event.data);
-                            this.updateMarkPrice(data);
-                            this.lastMessages.markPrice = Date.now();
-                            this.updateStreamData('markPrice', 'Son: ' + new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute: '2-digit', second: '2-digit'}));
-                        } catch (error) {
-                            console.error('Mark Price veri parsing hatası:', error);
-                        }
-                    };
-
-                    this.markPriceWs.onclose = () => {
-                        console.log('Mark Price WebSocket bağlantısı kapandı');
-                        this.updateStreamStatus('markPrice', 'disconnected');
-                    };
-
-                    this.markPriceWs.onerror = (error) => {
-                        console.error('Mark Price WebSocket hatası:', error);
-                        this.updateStreamStatus('markPrice', 'disconnected');
-                    };
-
-                } catch (error) {
-                    console.error('Mark Price bağlantı kurma hatası:', error);
-                    this.updateStreamStatus('markPrice', 'disconnected');
-                }
-            }
-
-            updateMarkPrice(data) {
-                if (data.e === 'markPriceUpdate') {
-                    const markPrice = parseFloat(data.p); // Mark price
-                    const indexPrice = parseFloat(data.i); // Index price
-                    const fundingRate = parseFloat(data.r); // Funding rate
-                    const nextFundingTime = parseInt(data.T); // Next funding time
-                    
-                    // Mark price ve index price güncelle
-                    document.getElementById('markPrice').textContent = `${markPrice.toFixed(4)}`;
-                    document.getElementById('indexPrice').textContent = `${indexPrice.toFixed(4)}`;
-                    
-                    // Funding rate güncelle (renk kodlaması ile)
-                    const fundingElement = document.getElementById('fundingRate');
-                    fundingElement.textContent = `${(fundingRate * 100).toFixed(3)}%`;
-                    fundingElement.className = `data-val ${fundingRate >= 0 ? 'positive' : 'negative'}`;
-                    
-                    // Sonraki funding time güncelle
-                    const nextFundingDate = new Date(nextFundingTime);
-                    const now = new Date();
-                    const timeDiff = nextFundingTime - now.getTime();
-                    
-                    if (timeDiff > 0) {
-                        const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-                        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                        document.getElementById('nextFunding').textContent = `${hours}:${minutes.toString().padStart(2, '0')}`;
-                    } else {
-                        document.getElementById('nextFunding').textContent = '--:--';
-                    }
-                }
-            }
-
-            updateMarkPrice(data) {
-                if (data.e === 'markPriceUpdate') {
-                    const markPrice = parseFloat(data.p); // Mark price
-                    const indexPrice = parseFloat(data.i); // Index price
-                    const fundingRate = parseFloat(data.r); // Funding rate
-                    const nextFundingTime = parseInt(data.T); // Next funding time
-                    
-                    // Mark price ve index price güncelle
-                    document.getElementById('markPrice').textContent = `${markPrice.toFixed(4)}`;
-                    document.getElementById('indexPrice').textContent = `${indexPrice.toFixed(4)}`;
-                    
-                    // Funding rate güncelle (renk kodlaması ile)
-                    const fundingElement = document.getElementById('fundingRate');
-                    fundingElement.textContent = `${(fundingRate * 100).toFixed(3)}%`;
-                    fundingElement.className = `data-value ${fundingRate >= 0 ? 'positive' : 'negative'}`;
-                    
-                    // Sonraki funding time güncelle
-                    const nextFundingDate = new Date(nextFundingTime);
-                    const now = new Date();
-                    const timeDiff = nextFundingTime - now.getTime();
-                    
-                    if (timeDiff > 0) {
-                        const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-                        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                        document.getElementById('nextFunding').textContent = `${hours}:${minutes.toString().padStart(2, '0')}`;
-                    } else {
-                        document.getElementById('nextFunding').textContent = '--:--';
-                    }
-                }
-            }
-
-            scheduleReconnect() {
-                if (this.reconnectAttempts < this.maxReconnectAttempts) {
-                    this.reconnectAttempts++;
-                    this.updateStatus(`Yeniden bağlanıyor... (${this.reconnectAttempts}/${this.maxReconnectAttempts})`, 'disconnected');
-                    
-                    setTimeout(() => {
-                        this.connect();
-                    }, this.reconnectDelay);
-                } else {
-                    this.updateStatus('Bağlantı Başarısız', 'disconnected');
-                }
+            reconnectAll() {
+                console.log('Manual reconnection initiated...');
+                
+                if (this.ws) this.ws.close();
+                if (this.markPriceWs) this.markPriceWs.close();
+                if (this.liquidationWs) this.liquidationWs.close();
+                
+                setTimeout(() => {
+                    this.connect();
+                    this.connectMarkPrice();
+                    this.connectLiquidation();
+                }, 1000);
             }
         }
 
-        // Sayfa yüklendiğinde bot'u başlat
+        // Initialize tracker
         let priceTracker;
         
         window.addEventListener('load', () => {
-            priceTracker = new SolanaPriceTracker();
+            priceTracker = new SolanaFuturesTracker();
         });
 
-        // Sayfa kapatılırken bağlantıyı kapat
         window.addEventListener('beforeunload', () => {
             if (priceTracker) {
-                priceTracker.disconnect();
+                priceTracker.reconnectAll();
             }
         });
     </script>
