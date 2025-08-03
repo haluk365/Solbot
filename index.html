@@ -93,6 +93,43 @@
             text-align: center;
         }
 
+        .sol-data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            height: 100%;
+            align-items: center;
+        }
+
+        .data-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 30px;
+        }
+
+        .data-label {
+            font-size: 9px;
+            color: #888;
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+
+        .data-value {
+            font-size: 11px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .positive {
+            color: #00ff88 !important;
+        }
+
+        .negative {
+            color: #ff4757 !important;
+        }
+
         .pulsing {
             animation: pulse 2s infinite;
         }
@@ -142,8 +179,40 @@
 
         <!-- Üst Sağ Kart -->
         <div class="card top-card-2">
-            <div class="card-title">Panel 2</div>
-            <div class="loading">İçerik yükleniyor...</div>
+            <div class="sol-data-grid">
+                <div class="data-item">
+                    <span class="data-label">Fiyat</span>
+                    <span class="data-value" id="price">$0.00</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">24h %</span>
+                    <span class="data-value" id="change24h">0.00%</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Yüksek</span>
+                    <span class="data-value" id="high24h">$0.00</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Düşük</span>
+                    <span class="data-value" id="low24h">$0.00</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Hacim</span>
+                    <span class="data-value" id="volume">0</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Quote Hacim</span>
+                    <span class="data-value" id="quoteVolume">0</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">İşlem</span>
+                    <span class="data-value" id="count">0</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Açılış</span>
+                    <span class="data-value" id="open">$0.00</span>
+                </div>
+            </div>
         </div>
 
         <!-- Sağ Yan Panel -->
@@ -200,10 +269,6 @@
                 this.reconnectDelay = 3000;
                 this.lastPrice = 0;
                 this.priceHistory = [];
-                
-                this.priceElement = document.getElementById('currentPrice');
-                this.changeElement = document.getElementById('priceChange');
-                this.statusElement = document.getElementById('connectionStatus');
                 
                 this.init();
             }
@@ -262,29 +327,28 @@
                 if (data.c) { // 'c' current price
                     const price = parseFloat(data.c);
                     const change24h = parseFloat(data.P); // 24h change percentage
+                    const high24h = parseFloat(data.h); // 24h high
+                    const low24h = parseFloat(data.l); // 24h low
+                    const volume = parseFloat(data.v); // volume
+                    const quoteVolume = parseFloat(data.q); // quote volume
+                    const count = parseInt(data.n); // count
+                    const open = parseFloat(data.o); // open price
                     
-                    // Fiyat değişim yönünü belirle
-                    let changeClass = '';
-                    if (this.lastPrice > 0) {
-                        changeClass = price > this.lastPrice ? 'price-up' : price < this.lastPrice ? 'price-down' : '';
-                    }
+                    // Panel 2 verilerini güncelle
+                    document.getElementById('price').textContent = `${price.toFixed(4)}`;
                     
-                    // Fiyatı güncelle
-                    this.priceElement.textContent = `$${price.toFixed(4)}`;
-                    this.priceElement.className = `price-value ${changeClass}`;
+                    const changeElement = document.getElementById('change24h');
+                    changeElement.textContent = `${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%`;
+                    changeElement.className = `data-value ${change24h >= 0 ? 'positive' : 'negative'}`;
                     
-                    // 24h değişimi güncelle
-                    const changeText = change24h >= 0 ? `+${change24h.toFixed(2)}%` : `${change24h.toFixed(2)}%`;
-                    this.changeElement.textContent = changeText;
-                    this.changeElement.className = `price-change ${change24h >= 0 ? 'price-up' : 'price-down'}`;
+                    document.getElementById('high24h').textContent = `${high24h.toFixed(4)}`;
+                    document.getElementById('low24h').textContent = `${low24h.toFixed(4)}`;
+                    document.getElementById('open').textContent = `${open.toFixed(4)}`;
                     
-                    // Animasyon ekle
-                    if (changeClass) {
-                        this.priceElement.classList.add('pulsing');
-                        setTimeout(() => {
-                            this.priceElement.classList.remove('pulsing');
-                        }, 1000);
-                    }
+                    // Hacim formatla
+                    document.getElementById('volume').textContent = this.formatNumber(volume);
+                    document.getElementById('quoteVolume').textContent = this.formatNumber(quoteVolume);
+                    document.getElementById('count').textContent = this.formatNumber(count);
                     
                     this.lastPrice = price;
                     this.priceHistory.push({price, timestamp: Date.now()});
@@ -296,9 +360,20 @@
                 }
             }
 
+            formatNumber(num) {
+                if (num >= 1e9) {
+                    return (num / 1e9).toFixed(1) + 'B';
+                } else if (num >= 1e6) {
+                    return (num / 1e6).toFixed(1) + 'M';
+                } else if (num >= 1e3) {
+                    return (num / 1e3).toFixed(1) + 'K';
+                } else {
+                    return num.toFixed(0);
+                }
+            }
+
             updateStatus(message, className) {
-                this.statusElement.textContent = message;
-                this.statusElement.className = `connection-status ${className}`;
+                console.log(`Durum: ${message}`);
             }
 
             scheduleReconnect() {
