@@ -149,41 +149,123 @@
             color: #ff4757 !important;
         }
 
-        .pulsing {
-            animation: pulse 2s infinite;
+        .stream-monitor {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .monitor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .monitor-title {
+            font-size: 11px;
+            color: #999;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .reconnect-btn {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 4px;
+            padding: 4px 8px;
+            color: #00ff88;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .reconnect-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.5);
+        }
+
+        .streams-container {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+            align-items: center;
+        }
+
+        .stream-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
+            padding: 6px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stream-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #666;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .stream-dot.connected {
+            background: #00ff88;
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+        }
+
+        .stream-dot.connecting {
+            background: #ffa500;
+            animation: pulse 1s infinite;
+        }
+
+        .stream-dot.disconnected {
+            background: #ff4757;
+        }
+
+        .stream-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stream-name {
+            font-size: 10px;
+            color: #fff;
+            font-weight: 500;
+            line-height: 1;
+        }
+
+        .stream-url {
+            font-size: 8px;
+            color: #888;
+            margin-top: 1px;
+            line-height: 1;
+        }
+
+        .stream-data {
+            font-size: 8px;
+            color: #bbb;
+            text-align: right;
+            flex-shrink: 0;
+            min-width: 30px;
         }
 
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         @media (max-width: 1200px) {
             .dashboard {
                 grid-template-columns: 1fr 250px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-                grid-template-rows: 40px 40px 200px 1fr 40px;
-            }
-            
-            .side-card {
-                grid-column: 1;
-                grid-row: 3;
-            }
-            
-            .chart-area {
-                grid-column: 1;
-                grid-row: 4;
-            }
-
-            .bottom-card {
-                grid-column: 1;
-                grid-row: 5;
             }
         }
     </style>
@@ -321,8 +403,40 @@
 
         <!-- Alt Panel -->
         <div class="card bottom-card">
-            <div class="card-title">Alt Panel</div>
-            <div class="loading">İçerik yükleniyor...</div>
+            <div class="stream-monitor">
+                <div class="monitor-header">
+                    <span class="monitor-title">WebSocket Streams</span>
+                    <button class="reconnect-btn" onclick="priceTracker.reconnectAll()" title="Tüm bağlantıları yeniden kur">
+                        <span>🔄</span>
+                    </button>
+                </div>
+                <div class="streams-container">
+                    <div class="stream-status" id="tickerStatus">
+                        <div class="stream-dot" id="tickerDot"></div>
+                        <div class="stream-info">
+                            <div class="stream-name">Ticker</div>
+                            <div class="stream-url">@ticker</div>
+                        </div>
+                        <div class="stream-data" id="tickerData">-</div>
+                    </div>
+                    <div class="stream-status" id="markPriceStatus">
+                        <div class="stream-dot" id="markPriceDot"></div>
+                        <div class="stream-info">
+                            <div class="stream-name">Mark Price</div>
+                            <div class="stream-url">@markPrice</div>
+                        </div>
+                        <div class="stream-data" id="markPriceData">-</div>
+                    </div>
+                    <div class="stream-status" id="liquidationStatus">
+                        <div class="stream-dot" id="liquidationDot"></div>
+                        <div class="stream-info">
+                            <div class="stream-name">Liquidation</div>
+                            <div class="stream-url">@forceOrder</div>
+                        </div>
+                        <div class="stream-data" id="liquidationData">-</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -337,6 +451,11 @@
                 this.reconnectDelay = 3000;
                 this.lastPrice = 0;
                 this.priceHistory = [];
+                this.lastMessages = {
+                    ticker: 0,
+                    markPrice: 0,
+                    liquidation: 0
+                };
                 
                 this.init();
             }
@@ -345,6 +464,11 @@
                 this.connect();
                 this.connectMarkPrice();
                 this.connectLiquidation();
+                
+                // Stream durumlarını başlat
+                this.updateStreamStatus('ticker', 'connecting');
+                this.updateStreamStatus('markPrice', 'connecting');
+                this.updateStreamStatus('liquidation', 'connecting');
                 
                 // Bağlantı koptuğunda otomatik yeniden bağlan
                 setInterval(() => {
@@ -358,18 +482,33 @@
                         this.connectLiquidation();
                     }
                 }, 10000);
+                
+                // Stream health check
+                setInterval(() => {
+                    const now = Date.now();
+                    // Ticker stream - 10 saniyeden uzun süre mesaj gelmemişse
+                    if (this.lastMessages.ticker > 0 && now - this.lastMessages.ticker > 10000) {
+                        this.updateStreamData('ticker', 'Timeout');
+                        this.updateStreamStatus('ticker', 'disconnected');
+                    }
+                    // Mark price stream - 15 saniyeden uzun süre mesaj gelmemişse
+                    if (this.lastMessages.markPrice > 0 && now - this.lastMessages.markPrice > 15000) {
+                        this.updateStreamData('markPrice', 'Timeout');
+                        this.updateStreamStatus('markPrice', 'disconnected');
+                    }
+                }, 5000);
             }
 
             connect() {
                 try {
-                    this.updateStatus('Bağlanıyor...', 'disconnected');
+                    this.updateStreamStatus('ticker', 'connecting');
                     
                     // Binance WebSocket URL'si - SOL/USDT Futures için
                     this.ws = new WebSocket('wss://fstream.binance.com/ws/solusdt@ticker');
                     
                     this.ws.onopen = () => {
                         console.log('Binance WebSocket bağlantısı kuruldu');
-                        this.updateStatus('Bağlı', 'connected');
+                        this.updateStreamStatus('ticker', 'connected');
                         this.reconnectAttempts = 0;
                     };
 
@@ -377,6 +516,8 @@
                         try {
                             const data = JSON.parse(event.data);
                             this.updatePrice(data);
+                            this.lastMessages.ticker = Date.now();
+                            this.updateStreamData('ticker', 'Son: ' + new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute: '2-digit', second: '2-digit'}));
                         } catch (error) {
                             console.error('Veri parsing hatası:', error);
                         }
@@ -384,17 +525,18 @@
 
                     this.ws.onclose = () => {
                         console.log('WebSocket bağlantısı kapandı');
-                        this.updateStatus('Bağlantı Kesildi', 'disconnected');
+                        this.updateStreamStatus('ticker', 'disconnected');
                         this.scheduleReconnect();
                     };
 
                     this.ws.onerror = (error) => {
                         console.error('WebSocket hatası:', error);
-                        this.updateStatus('Bağlantı Hatası', 'disconnected');
+                        this.updateStreamStatus('ticker', 'disconnected');
                     };
 
                 } catch (error) {
                     console.error('Bağlantı kurma hatası:', error);
+                    this.updateStreamStatus('ticker', 'disconnected');
                     this.scheduleReconnect();
                 }
             }
@@ -454,17 +596,22 @@
 
             connectMarkPrice() {
                 try {
+                    this.updateStreamStatus('markPrice', 'connecting');
+                    
                     // Mark Price Stream - her 3 saniyede güncellenir
                     this.markPriceWs = new WebSocket('wss://fstream.binance.com/ws/solusdt@markPrice');
                     
                     this.markPriceWs.onopen = () => {
                         console.log('Mark Price WebSocket bağlantısı kuruldu');
+                        this.updateStreamStatus('markPrice', 'connected');
                     };
 
                     this.markPriceWs.onmessage = (event) => {
                         try {
                             const data = JSON.parse(event.data);
                             this.updateMarkPrice(data);
+                            this.lastMessages.markPrice = Date.now();
+                            this.updateStreamData('markPrice', 'Son: ' + new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute: '2-digit', second: '2-digit'}));
                         } catch (error) {
                             console.error('Mark Price veri parsing hatası:', error);
                         }
@@ -472,14 +619,17 @@
 
                     this.markPriceWs.onclose = () => {
                         console.log('Mark Price WebSocket bağlantısı kapandı');
+                        this.updateStreamStatus('markPrice', 'disconnected');
                     };
 
                     this.markPriceWs.onerror = (error) => {
                         console.error('Mark Price WebSocket hatası:', error);
+                        this.updateStreamStatus('markPrice', 'disconnected');
                     };
 
                 } catch (error) {
                     console.error('Mark Price bağlantı kurma hatası:', error);
+                    this.updateStreamStatus('markPrice', 'disconnected');
                 }
             }
 
