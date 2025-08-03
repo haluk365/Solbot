@@ -1,0 +1,2 @@
+# Solbot
+Solana Takip Botu
