@@ -93,40 +93,53 @@
             text-align: center;
         }
 
-        .sol-data-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 4px;
-            height: 100%;
-            padding: 2px;
-        }
-
-        .data-item {
+        .sol-data-container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            padding: 2px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: 100%;
+            gap: 3px;
+            padding: 4px;
+            font-size: 11px;
         }
 
-        .data-label {
+        .data-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            padding: 3px 6px;
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
             font-size: 8px;
             color: #888;
-            margin-bottom: 1px;
-            font-weight: 500;
-            white-space: nowrap;
+            margin-bottom: 2px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .data-value {
-            font-size: 10px;
-            font-weight: bold;
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1px;
+        }
+
+        .data-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .data-key {
+            font-size: 9px;
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        .data-val {
+            font-size: 9px;
+            font-weight: 600;
             color: #fff;
-            white-space: nowrap;
+            text-align: right;
         }
 
         .positive {
@@ -186,50 +199,93 @@
 
         <!-- Üst Sağ Kart -->
         <div class="card top-card-2">
-            <div class="sol-data-grid">
-                <div class="data-item">
-                    <span class="data-label">Fiyat</span>
-                    <span class="data-value" id="price">$0.00</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">24h %</span>
-                    <span class="data-value" id="change24h">0.00%</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Yüksek</span>
-                    <span class="data-value" id="high24h">$0.00</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Düşük</span>
-                    <span class="data-value" id="low24h">$0.00</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Açılış</span>
-                    <span class="data-value" id="open">$0.00</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Ortalama</span>
-                    <span class="data-value" id="avgPrice">$0.00</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Hacim</span>
-                    <span class="data-value" id="volume">0</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Quote</span>
-                    <span class="data-value" id="quoteVolume">0</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">İşlem</span>
-                    <span class="data-value" id="count">0</span>
-                </div>
-            </div>
+            <div class="card-title">Panel 2</div>
+            <div class="loading">İçerik yükleniyor...</div>
         </div>
 
         <!-- Sağ Yan Panel -->
         <div class="card side-card">
-            <div class="card-title">Yan Panel</div>
-            <div class="loading">İçerik yükleniyor...</div>
+            <div class="sol-data-container">
+                <!-- Ana Fiyat Bilgileri -->
+                <div class="data-section" style="border-left-color: #00ff88;">
+                    <div class="section-title">Fiyat</div>
+                    <div class="data-row">
+                        <span class="data-key">Spot</span>
+                        <span class="data-val" id="price">$0.00</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">Mark</span>
+                        <span class="data-val" id="markPrice">$0.00</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">Index</span>
+                        <span class="data-val" id="indexPrice">$0.00</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">24h %</span>
+                        <span class="data-val" id="change24h">0.00%</span>
+                    </div>
+                </div>
+
+                <!-- 24h İstatistikler -->
+                <div class="data-section" style="border-left-color: #3498db;">
+                    <div class="section-title">24h Veriler</div>
+                    <div class="data-row">
+                        <span class="data-key">Yüksek</span>
+                        <span class="data-val" id="high24h">$0.00</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">Düşük</span>
+                        <span class="data-val" id="low24h">$0.00</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">Hacim</span>
+                        <span class="data-val" id="volume">0</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">İşlem</span>
+                        <span class="data-val" id="count">0</span>
+                    </div>
+                </div>
+
+                <!-- Futures Bilgileri -->
+                <div class="data-section" style="border-left-color: #e74c3c;">
+                    <div class="section-title">Futures</div>
+                    <div class="data-row">
+                        <span class="data-key">Funding</span>
+                        <span class="data-val" id="fundingRate">0.000%</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">Sonraki</span>
+                        <span class="data-val" id="nextFunding">--:--</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">Ortalama</span>
+                        <span class="data-val" id="avgPrice">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Liquidation Bilgileri -->
+                <div class="data-section" style="border-left-color: #ff6b35;">
+                    <div class="section-title">Son Liquidation</div>
+                    <div class="data-row">
+                        <span class="data-key">Side</span>
+                        <span class="data-val" id="liqSide">-</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">Fiyat</span>
+                        <span class="data-val" id="liqPrice">$0.00</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">Miktar</span>
+                        <span class="data-val" id="liqQuantity">0</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-key">Zaman</span>
+                        <span class="data-val" id="liqTime">--:--</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Ana Grafik Alanı -->
@@ -275,6 +331,8 @@
         class SolanaPriceTracker {
             constructor() {
                 this.ws = null;
+                this.markPriceWs = null;
+                this.liquidationWs = null;
                 this.reconnectAttempts = 0;
                 this.maxReconnectAttempts = 5;
                 this.reconnectDelay = 3000;
@@ -286,11 +344,19 @@
 
             init() {
                 this.connect();
+                this.connectMarkPrice();
+                this.connectLiquidation();
                 
                 // Bağlantı koptuğunda otomatik yeniden bağlan
                 setInterval(() => {
                     if (!this.ws || this.ws.readyState === WebSocket.CLOSED) {
                         this.connect();
+                    }
+                    if (!this.markPriceWs || this.markPriceWs.readyState === WebSocket.CLOSED) {
+                        this.connectMarkPrice();
+                    }
+                    if (!this.liquidationWs || this.liquidationWs.readyState === WebSocket.CLOSED) {
+                        this.connectLiquidation();
                     }
                 }, 10000);
             }
@@ -371,6 +437,10 @@
                 }
             }
 
+            updateStatus(message, className) {
+                console.log(`Durum: ${message}`);
+            }
+
             formatNumber(num) {
                 if (num >= 1e9) {
                     return (num / 1e9).toFixed(1) + 'B';
@@ -379,12 +449,101 @@
                 } else if (num >= 1e3) {
                     return (num / 1e3).toFixed(1) + 'K';
                 } else {
-                    return num.toFixed(0);
+                    return num.toFixed(2);
                 }
             }
 
-            updateStatus(message, className) {
-                console.log(`Durum: ${message}`);
+            connectMarkPrice() {
+                try {
+                    // Mark Price Stream - her 3 saniyede güncellenir
+                    this.markPriceWs = new WebSocket('wss://fstream.binance.com/ws/solusdt@markPrice');
+                    
+                    this.markPriceWs.onopen = () => {
+                        console.log('Mark Price WebSocket bağlantısı kuruldu');
+                    };
+
+                    this.markPriceWs.onmessage = (event) => {
+                        try {
+                            const data = JSON.parse(event.data);
+                            this.updateMarkPrice(data);
+                        } catch (error) {
+                            console.error('Mark Price veri parsing hatası:', error);
+                        }
+                    };
+
+                    this.markPriceWs.onclose = () => {
+                        console.log('Mark Price WebSocket bağlantısı kapandı');
+                    };
+
+                    this.markPriceWs.onerror = (error) => {
+                        console.error('Mark Price WebSocket hatası:', error);
+                    };
+
+                } catch (error) {
+                    console.error('Mark Price bağlantı kurma hatası:', error);
+                }
+            }
+
+            updateMarkPrice(data) {
+                if (data.e === 'markPriceUpdate') {
+                    const markPrice = parseFloat(data.p); // Mark price
+                    const indexPrice = parseFloat(data.i); // Index price
+                    const fundingRate = parseFloat(data.r); // Funding rate
+                    const nextFundingTime = parseInt(data.T); // Next funding time
+                    
+                    // Mark price ve index price güncelle
+                    document.getElementById('markPrice').textContent = `${markPrice.toFixed(4)}`;
+                    document.getElementById('indexPrice').textContent = `${indexPrice.toFixed(4)}`;
+                    
+                    // Funding rate güncelle (renk kodlaması ile)
+                    const fundingElement = document.getElementById('fundingRate');
+                    fundingElement.textContent = `${(fundingRate * 100).toFixed(3)}%`;
+                    fundingElement.className = `data-val ${fundingRate >= 0 ? 'positive' : 'negative'}`;
+                    
+                    // Sonraki funding time güncelle
+                    const nextFundingDate = new Date(nextFundingTime);
+                    const now = new Date();
+                    const timeDiff = nextFundingTime - now.getTime();
+                    
+                    if (timeDiff > 0) {
+                        const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                        document.getElementById('nextFunding').textContent = `${hours}:${minutes.toString().padStart(2, '0')}`;
+                    } else {
+                        document.getElementById('nextFunding').textContent = '--:--';
+                    }
+                }
+            }
+
+            updateMarkPrice(data) {
+                if (data.e === 'markPriceUpdate') {
+                    const markPrice = parseFloat(data.p); // Mark price
+                    const indexPrice = parseFloat(data.i); // Index price
+                    const fundingRate = parseFloat(data.r); // Funding rate
+                    const nextFundingTime = parseInt(data.T); // Next funding time
+                    
+                    // Mark price ve index price güncelle
+                    document.getElementById('markPrice').textContent = `${markPrice.toFixed(4)}`;
+                    document.getElementById('indexPrice').textContent = `${indexPrice.toFixed(4)}`;
+                    
+                    // Funding rate güncelle (renk kodlaması ile)
+                    const fundingElement = document.getElementById('fundingRate');
+                    fundingElement.textContent = `${(fundingRate * 100).toFixed(3)}%`;
+                    fundingElement.className = `data-value ${fundingRate >= 0 ? 'positive' : 'negative'}`;
+                    
+                    // Sonraki funding time güncelle
+                    const nextFundingDate = new Date(nextFundingTime);
+                    const now = new Date();
+                    const timeDiff = nextFundingTime - now.getTime();
+                    
+                    if (timeDiff > 0) {
+                        const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                        document.getElementById('nextFunding').textContent = `${hours}:${minutes.toString().padStart(2, '0')}`;
+                    } else {
+                        document.getElementById('nextFunding').textContent = '--:--';
+                    }
+                }
             }
 
             scheduleReconnect() {
@@ -397,12 +556,6 @@
                     }, this.reconnectDelay);
                 } else {
                     this.updateStatus('Bağlantı Başarısız', 'disconnected');
-                }
-            }
-
-            disconnect() {
-                if (this.ws) {
-                    this.ws.close();
                 }
             }
         }
